@@ -23,5 +23,18 @@ type Dog {
 }
 
 type Query {
+  dog(id: String!): Dog!
   dogs: [Dog!]!
+  reservation: Reservation!
+}
+
+type Reservation {
+  id: String!
+  userId: String!
+  dogId: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  expiresAt: DateTime
+  pendingReturn: Boolean
+  returnedAt: DateTime
 }
