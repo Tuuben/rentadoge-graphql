@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { DogService } from './dog.service';
-import { DogResolver } from './dog.resolver';
+import { BookingModule } from './../booking/booking.module';
 import { BreedModule } from './../breed/breed.module';
+import { DogResolver } from './dog.resolver';
+import { DogService } from './dog.service';
 
 @Module({
-  imports: [BreedModule],
-  providers: [DogService, DogResolver]
+  imports: [BreedModule, BookingModule],
+  providers: [DogService, DogResolver],
 })
-export class DogModule { }
+export class DogModule {}

@@ -35,6 +35,8 @@ type Dog {
   createdAt: DateTime
   updatedAt: DateTime
   breed: Breed!
+  isBookedByUser: Boolean
+  isBooked: Boolean
 }
 
 type Mutation {
@@ -46,6 +48,7 @@ type Mutation {
 
 type Query {
   Booking: Booking!
+  breeds: [Breed!]!
   dog(dogId: String!): Dog!
   dogs: [Dog!]!
 }

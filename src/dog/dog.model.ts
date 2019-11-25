@@ -24,6 +24,12 @@ export class Dog {
   @Field(type => Breed)
   breed?: Breed;
 
+  @Field({ nullable: true })
+  isBookedByUser?: boolean;
+
+  @Field({ nullable: true })
+  isBooked?: boolean;
+
   /* Non queriable fields */
   breedId?: string;
 }

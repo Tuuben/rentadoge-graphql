@@ -1,10 +1,12 @@
 import {
   Args,
+  Context,
   Parent,
   Query,
   ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
+import { BookingService } from './../booking/booking.service';
 import { Breed } from './../breed/breed.model';
 import { BreedService } from './../breed/breed.service';
 import { Dog } from './dog.model';
@@ -15,6 +17,7 @@ export class DogResolver {
   constructor(
     private readonly dogService: DogService,
     private readonly breedService: BreedService,
+    private readonly bookingService: BookingService,
   ) {}
 
   @Query(returns => Dog, { name: 'dog' })
@@ -31,5 +34,15 @@ export class DogResolver {
   breed(@Parent() dog: Dog) {
     const { breedId } = dog;
     return this.breedService.getBreed(breedId);
+  }
+
+  @ResolveProperty()
+  isBookedByUser(@Parent() dog: Dog, @Context('context') { userId }) {
+    return this.bookingService.getIsDogBookedByUser(dog.id, userId);
+  }
+
+  @ResolveProperty()
+  isBooked(@Parent() dog: Dog) {
+    return this.bookingService.getIsDogBooked(dog.id);
   }
 }

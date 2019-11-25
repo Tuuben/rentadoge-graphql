@@ -1,3 +1,4 @@
+import { Booking } from 'src/booking/booking.model';
 import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType()
@@ -16,4 +17,7 @@ export class User {
 
   @Field({ nullable: true })
   postCode: string;
+
+  @Field(type => Booking, { nullable: true })
+  currentBooking?: Booking;
 }

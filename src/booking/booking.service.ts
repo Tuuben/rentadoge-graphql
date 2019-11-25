@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import { combineDocument } from './../helper';
+import { combineCollectionSnapshot, combineDocument } from './../helper';
+import { Booking } from './booking.model';
 
 @Injectable()
 export class BookingService {
@@ -73,5 +74,36 @@ export class BookingService {
       .collection('bookings')
       .doc(bookingId)
       .update(data);
+  }
+
+  async getIsDogBookedByUser(dogId: string, userId: string) {
+    const snapshot = await admin
+      .firestore()
+      .collection('bookings')
+      .where('dogId', '==', dogId)
+      .where('userId', '==', userId)
+      .get();
+
+    const bookings = combineCollectionSnapshot(snapshot) as Booking[];
+
+    const activeBooking = bookings.filter(
+      b => !b.returnedAt && !b.pendingReturn,
+    )[0];
+
+    return !!activeBooking;
+  }
+
+  async getIsDogBooked(dogId: string) {
+    const snapshot = await admin
+      .firestore()
+      .collection('bookings')
+      .where('dogId', '==', dogId)
+      .get();
+
+    const bookings = combineCollectionSnapshot(snapshot) as Booking[];
+
+    return (
+      bookings && !!bookings.filter(b => !b.returnedAt && !b.pendingReturn)
+    );
   }
 }

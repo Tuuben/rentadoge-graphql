@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { BreedResolver } from './breed.resolver';
 import { BreedService } from './breed.service';
 
 @Module({
-    providers: [BreedService],
-    exports: [BreedService]
+  providers: [BreedService, BreedResolver],
+  exports: [BreedService],
 })
-export class BreedModule { }
+export class BreedModule {}

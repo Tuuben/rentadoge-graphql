@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import { combineDocument } from '../helper';
+import { combineCollectionSnapshot, combineDocument } from '../helper';
 
 @Injectable()
 export class BreedService {
@@ -12,5 +12,14 @@ export class BreedService {
       .get();
 
     return combineDocument(snapshot);
+  }
+
+  async getAllBreeds() {
+    const snapshot = await admin
+      .firestore()
+      .collection('breeds')
+      .get();
+
+    return combineCollectionSnapshot(snapshot);
   }
 }
