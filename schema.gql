@@ -22,6 +22,11 @@ type Dog {
   breed: Breed!
 }
 
+type Mutation {
+  createReservation(dogId: String!): Reservation!
+  acceptReservationReturn(reservationId: String!): Reservation!
+}
+
 type Query {
   dog(id: String!): Dog!
   dogs: [Dog!]!
