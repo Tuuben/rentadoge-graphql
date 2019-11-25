@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BookingModule } from './booking/booking.module';
 import { BreedModule } from './breed/breed.module';
 import { DogModule } from './dog/dog.module';
 import { MockModule } from './mock/mock.module';
-import { ReservationModule } from './reservation/reservation.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -22,7 +22,7 @@ import { UserModule } from './user/user.module';
     }),
     DogModule,
     BreedModule,
-    ReservationModule,
+    BookingModule,
     MockModule,
     UserModule,
   ],

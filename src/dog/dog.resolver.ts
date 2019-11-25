@@ -18,8 +18,8 @@ export class DogResolver {
   ) {}
 
   @Query(returns => Dog, { name: 'dog' })
-  async getDog(@Args({ name: 'id', type: () => String }) id: string) {
-    return this.dogService.getDogById(id);
+  async getDog(@Args({ name: 'dogId', type: () => String }) dogId: string) {
+    return this.dogService.getDogById(dogId);
   }
 
   @Query(returns => [Dog], { name: 'dogs' })

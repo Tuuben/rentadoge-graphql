@@ -3,6 +3,18 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Booking {
+  id: String!
+  userId: String!
+  dogId: String!
+  createdAt: DateTime
+  updatedAt: DateTime
+  expiresAt: DateTime
+  pendingReturn: Boolean
+  returnedAt: DateTime
+  stolen: Boolean
+}
+
 type Breed {
   id: String!
   name: String
@@ -26,24 +38,14 @@ type Dog {
 }
 
 type Mutation {
+  createBooking(dogId: String!): Booking!
+  endBooking(bookingId: String!): Boolean!
+  acceptBookingEnded(bookingId: String!): Boolean!
   createMockDogsAndBreeds: String!
-  createReservation(dogId: String!): Reservation!
-  acceptReservationReturn(reservationId: String!): Reservation!
 }
 
 type Query {
-  dog(id: String!): Dog!
+  Booking: Booking!
+  dog(dogId: String!): Dog!
   dogs: [Dog!]!
-  reservation: Reservation!
-}
-
-type Reservation {
-  id: String!
-  userId: String!
-  dogId: String!
-  createdAt: DateTime
-  updatedAt: DateTime
-  expiresAt: DateTime
-  pendingReturn: Boolean
-  returnedAt: DateTime
 }
