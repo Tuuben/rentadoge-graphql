@@ -4,7 +4,7 @@ import { combineCollectionSnapshot, combineDocument } from '../helper';
 
 @Injectable()
 export class DogService {
-  getDogById(id: string) {
+  async getDogById(id: string) {
     const snapshot = await admin
       .firestore()
       .collection('dogs')

@@ -9,6 +9,7 @@ import { Breed } from './../breed/breed.model';
 import { BreedService } from './../breed/breed.service';
 import { Dog } from './dog.model';
 import { DogService } from './dog.service';
+
 @Resolver(of => Dog)
 export class DogResolver {
   constructor(
