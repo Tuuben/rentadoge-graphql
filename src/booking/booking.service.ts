@@ -108,8 +108,8 @@ export class BookingService {
       }
     }
 
-    const isBooked = this.getIsDogBooked(dogId);
-    if (isBooked) {
+    const isCurrentlyBooked = await this.getIsDogBooked(dogId);
+    if (isCurrentlyBooked) {
       return 'booked';
     }
 
@@ -130,7 +130,7 @@ export class BookingService {
 
     const bookings = combineCollectionSnapshot(snapshot) as Booking[];
 
-    const activeBooking = bookings.filter(b => !!b.active)[0];
+    const activeBooking = !!bookings.find(b => !!b.active);
 
     return !!activeBooking;
   }
@@ -143,8 +143,8 @@ export class BookingService {
       .where('active', '==', true)
       .get();
 
-    const bookings = combineCollectionSnapshot(snapshot) as Booking[];
+    const booking = combineCollectionSnapshot(snapshot)[0];
 
-    return bookings && !!bookings.length;
+    return !!booking;
   }
 }

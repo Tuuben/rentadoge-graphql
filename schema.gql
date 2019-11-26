@@ -37,6 +37,7 @@ type Dog {
   breed: Breed!
   isBookedByUser: Boolean
   isBooked: Boolean
+  bookingStatus: String
 }
 
 type Mutation {
