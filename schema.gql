@@ -12,7 +12,7 @@ type Booking {
   expiresAt: DateTime
   pendingReturn: Boolean
   returnedAt: DateTime
-  stolen: Boolean
+  active: Boolean
 }
 
 type Breed {
@@ -47,7 +47,6 @@ type Mutation {
 }
 
 type Query {
-  Booking: Booking!
   breeds: [Breed!]!
   dog(dogId: String!): Dog!
   dogs: [Dog!]!

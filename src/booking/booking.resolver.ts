@@ -1,15 +1,10 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Booking } from './booking.model';
 import { BookingService } from './booking.service';
 
 @Resolver(of => Booking)
 export class BookingResolver {
-  constructor(private readonly bookingService: BookingService) { }
-
-  @Query(results => Booking, { name: 'Booking' })
-  async getBooking(bookingId: string) {
-    return this.bookingService.getBookingById(bookingId);
-  }
+  constructor(private readonly bookingService: BookingService) {}
 
   @Mutation(results => Booking)
   async createBooking(

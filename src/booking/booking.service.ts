@@ -1,21 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { NotAuthorized } from './../common/exceptions/not-authorized.exception';
-import { combineCollectionSnapshot, combineDocument } from './../helper';
+import { combineCollectionSnapshot } from './../helper';
 import { Booking } from './booking.model';
 
 @Injectable()
 export class BookingService {
-  async getBookingById(bookingId: string) {
-    const snapshot = await admin
-      .firestore()
-      .collection('bookings')
-      .doc(bookingId)
-      .get();
-
-    return combineDocument(snapshot);
-  }
-
   async createBooking(dogId: string, userId: string) {
     if (!userId) {
       throw new NotAuthorized();

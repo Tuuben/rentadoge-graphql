@@ -1,9 +1,9 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
+import { Booking } from './../booking/booking.model';
 import { NotAuthorized } from './../common/exceptions/not-authorized.exception';
+import { combineCollectionSnapshot, combineDocument } from './../helper';
 import { User } from './user.model';
-import { combineCollectionSnapshot, combineDocument } from 'src/helper';
-import { Booking } from 'src/booking/booking.model';
 
 @Injectable()
 export class UserService {
@@ -47,8 +47,8 @@ export class UserService {
       postCode: data.postCode || null,
       country: data.country || null,
       createdAt: new Date(),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    };
   }
 
   async getBookedDog(userId: string) {
