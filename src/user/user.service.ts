@@ -36,7 +36,8 @@ export class UserService {
       .firestore()
       .collection('users')
       .doc(userId)
-      .set(updatedUser);
+      .set(updatedUser)
+      .then(res => !!res);
   }
 
   userFactory(data: any): User {

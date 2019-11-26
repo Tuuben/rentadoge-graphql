@@ -19,7 +19,7 @@ export class UserResolver {
     return this.userService.getUser(userId);
   }
 
-  @Mutation(returns => User)
+  @Mutation(returns => Boolean)
   updateUser(
     @Args('data') data: UserDataInput,
     @Context('context') { userId },

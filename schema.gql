@@ -45,7 +45,7 @@ type Mutation {
   endBooking(dogId: String!): Boolean!
   acceptBookingEnded(bookingId: String!): Boolean!
   createMockDogsAndBreeds: String!
-  updateUser(data: UserDataInput!): User!
+  updateUser(data: UserDataInput!): Boolean!
 }
 
 type Query {
