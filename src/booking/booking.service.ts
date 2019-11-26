@@ -42,8 +42,25 @@ export class BookingService {
     return { id, ...booking };
   }
 
-  endBooking(bookingId: string) {
-    const data = {
+  async endBooking(dogId: string, userId: string) {
+    if (!userId) {
+      throw new NotAuthorized();
+    }
+
+    const snapshot = await admin
+      .firestore()
+      .collection('bookings')
+      .where('dogId', '==', dogId)
+      .where('userId', '==', userId)
+      .get();
+
+    const booking = combineCollectionSnapshot(snapshot)[0] as Booking;
+
+    if (!booking) {
+      throw new HttpException('Non existant booking.', HttpStatus.NOT_FOUND);
+    }
+
+    const updatedData = {
       updatedAt: new Date(),
       pendingReturn: true,
       active: false,
@@ -52,27 +69,15 @@ export class BookingService {
     return admin
       .firestore()
       .collection('bookings')
-      .doc(bookingId)
-      .update(data);
+      .doc(booking.id)
+      .update(updatedData);
   }
 
   acceptBookingEnded(bookingId: string) {
     const data = {
       updatedAt: new Date(),
       returnedAt: new Date(),
-    };
-
-    return admin
-      .firestore()
-      .collection('bookings')
-      .doc(bookingId)
-      .update(data);
-  }
-
-  declineBookingEnded(bookingId: string) {
-    const data = {
-      updatedAt: new Date(),
-      stolen: true,
+      pendingReturn: false,
     };
 
     return admin

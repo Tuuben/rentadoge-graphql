@@ -15,8 +15,11 @@ export class BookingResolver {
   }
 
   @Mutation(results => Boolean)
-  async endBooking(@Args('bookingId') bookingId: string) {
-    return this.bookingService.endBooking(bookingId);
+  async endBooking(
+    @Args('dogId') dogId: string,
+    @Context('context') { userId },
+  ) {
+    return this.bookingService.endBooking(dogId, userId);
   }
 
   @Mutation(results => Boolean)
