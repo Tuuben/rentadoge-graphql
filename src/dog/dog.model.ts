@@ -30,6 +30,9 @@ export class Dog {
   @Field({ nullable: true })
   isBooked?: boolean;
 
+  @Field({ nullable: true })
+  bookingStatus: 'open' | 'booked' | 'user-booked';
+
   /* Non queriable fields */
   breedId?: string;
 }

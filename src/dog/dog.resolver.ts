@@ -37,12 +37,7 @@ export class DogResolver {
   }
 
   @ResolveProperty()
-  isBookedByUser(@Parent() dog: Dog, @Context('context') { userId }) {
-    return this.bookingService.getIsDogBookedByUser(dog.id, userId);
-  }
-
-  @ResolveProperty()
-  isBooked(@Parent() dog: Dog) {
-    return this.bookingService.getIsDogBooked(dog.id);
+  bookingStatus(@Parent() dog: Dog, @Context('context') { userId }) {
+    return this.bookingService.getBookingStatus(dog.id, userId);
   }
 }

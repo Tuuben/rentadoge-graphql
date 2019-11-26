@@ -66,7 +66,7 @@ export class BookingService {
       active: false,
     };
 
-    return admin
+    return !!admin
       .firestore()
       .collection('bookings')
       .doc(booking.id)
@@ -80,14 +80,43 @@ export class BookingService {
       pendingReturn: false,
     };
 
-    return admin
+    return !!admin
       .firestore()
       .collection('bookings')
       .doc(bookingId)
       .update(data);
   }
 
-  async getIsDogBookedByUser(dogId: string, userId: string) {
+  async userHasActiveBooking(userId: string) {
+    const snapshot = await admin
+      .firestore()
+      .collection('bookings')
+      .where('userId', '==', userId)
+      .where('active', '==', true)
+      .get();
+
+    const booking = combineCollectionSnapshot(snapshot)[0];
+    return !!booking;
+  }
+
+  async getBookingStatus(dogId: string, userId: string) {
+    if (userId) {
+      const dogBookedByUser = await this.getIsDogBookedByUser(dogId, userId);
+
+      if (dogBookedByUser) {
+        return 'user-booked';
+      }
+    }
+
+    const isBooked = this.getIsDogBooked(dogId);
+    if (isBooked) {
+      return 'booked';
+    }
+
+    return 'open';
+  }
+
+  private async getIsDogBookedByUser(dogId: string, userId: string) {
     if (!userId) {
       throw new NotAuthorized();
     }
@@ -106,7 +135,7 @@ export class BookingService {
     return !!activeBooking;
   }
 
-  async getIsDogBooked(dogId: string) {
+  private async getIsDogBooked(dogId: string) {
     const snapshot = await admin
       .firestore()
       .collection('bookings')
@@ -117,17 +146,5 @@ export class BookingService {
     const bookings = combineCollectionSnapshot(snapshot) as Booking[];
 
     return bookings && !!bookings.length;
-  }
-
-  async userHasActiveBooking(userId: string) {
-    const snapshot = await admin
-      .firestore()
-      .collection('bookings')
-      .where('userId', '==', userId)
-      .where('active', '==', true)
-      .get();
-
-    const booking = combineCollectionSnapshot(snapshot)[0];
-    return !!booking;
   }
 }

@@ -9,7 +9,7 @@ export class BookingResolver {
   @Mutation(results => Booking)
   async createBooking(
     @Args('dogId') dogId: string,
-    @Context('userId') userId: any,
+    @Context('context') { userId }: any,
   ) {
     return this.bookingService.createBooking(dogId, userId);
   }
