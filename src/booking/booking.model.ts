@@ -27,5 +27,5 @@ export class Booking {
   returnedAt?: Date;
 
   @Field({ nullable: true })
-  stolen?: boolean;
+  active?: boolean;
 }

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { combineCollectionSnapshot, combineDocument } from './../helper';
 import { Booking } from './booking.model';
+import { NotAuthorized } from './../common/exceptions/not-authorized.exception';
 
 @Injectable()
 export class BookingService {
@@ -16,17 +17,23 @@ export class BookingService {
   }
 
   async createBooking(dogId: string, userId: string) {
-    const booking = {
-      dogId,
-      userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    if (!userId) {
+      throw new NotAuthorized();
+    }
 
     const id = admin
       .firestore()
       .collection('bookings')
       .doc().id;
+
+
+    const booking = {
+      dogId,
+      userId,
+      active: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
     admin
       .firestore()
@@ -41,6 +48,7 @@ export class BookingService {
     const data = {
       updatedAt: new Date(),
       pendingReturn: true,
+      active: false
     };
 
     return admin
@@ -77,6 +85,10 @@ export class BookingService {
   }
 
   async getIsDogBookedByUser(dogId: string, userId: string) {
+    if (!userId) {
+      throw new NotAuthorized();
+    }
+
     const snapshot = await admin
       .firestore()
       .collection('bookings')

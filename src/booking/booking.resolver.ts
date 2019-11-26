@@ -4,7 +4,7 @@ import { BookingService } from './booking.service';
 
 @Resolver(of => Booking)
 export class BookingResolver {
-  constructor(private readonly bookingService: BookingService) {}
+  constructor(private readonly bookingService: BookingService) { }
 
   @Query(results => Booking, { name: 'Booking' })
   async getBooking(bookingId: string) {
