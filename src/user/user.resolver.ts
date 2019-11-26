@@ -1,10 +1,18 @@
-import { Args, Mutation, Query, Resolver, ResolveProperty, Context } from '@nestjs/graphql';
+import {
+  Args,
+  Context,
+  Mutation,
+  Query,
+  ResolveProperty,
+  Resolver,
+} from '@nestjs/graphql';
+import { UserDataInput } from './user-data-input';
 import { User } from './user.model';
 import { UserService } from './user.service';
 
 @Resolver(of => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Query(returns => User, { name: 'user' })
   getUser(@Context('context') { userId }) {
@@ -12,7 +20,10 @@ export class UserResolver {
   }
 
   @Mutation(returns => User)
-  updateUser(@Args('data') data: any, @Context('context') { userId }) {
+  updateUser(
+    @Args('data') data: UserDataInput,
+    @Context('context') { userId },
+  ) {
     return this.userService.updateUser(userId, data);
   }
 

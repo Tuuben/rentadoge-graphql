@@ -20,6 +20,11 @@ export class DogResolver {
     private readonly bookingService: BookingService,
   ) {}
 
+  @Query(returns => Dog, { name: 'usersBookedDog', nullable: true })
+  async getUsersBookedDog(@Context('context') { userId }) {
+    return this.dogService.getUsersBookedDog(userId);
+  }
+
   @Query(returns => Dog, { name: 'dog' })
   async getDog(@Args({ name: 'dogId', type: () => String }) dogId: string) {
     return this.dogService.getDogById(dogId);

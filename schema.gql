@@ -28,13 +28,13 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Dog {
-  id: String!
+  id: String
   name: String
   description: String
   imgURL: String
   createdAt: DateTime
   updatedAt: DateTime
-  breed: Breed!
+  breed: Breed
   isBookedByUser: Boolean
   isBooked: Boolean
   bookingStatus: String
@@ -45,10 +45,34 @@ type Mutation {
   endBooking(dogId: String!): Boolean!
   acceptBookingEnded(bookingId: String!): Boolean!
   createMockDogsAndBreeds: String!
+  updateUser(data: UserDataInput!): User!
 }
 
 type Query {
   breeds: [Breed!]!
+  breed(breedId: String!): Breed!
+  usersBookedDog: Dog
   dog(dogId: String!): Dog!
   dogs: [Dog!]!
+  user: User!
+}
+
+type User {
+  id: String!
+  name: String
+  streetAdress: String
+  city: String
+  postCode: String
+  country: String
+  bookedDog: Dog
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input UserDataInput {
+  name: String
+  streetAdress: String
+  city: String
+  postCode: String
+  country: String
 }

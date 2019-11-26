@@ -1,4 +1,4 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Breed } from './breed.model';
 import { BreedService } from './breed.service';
 
@@ -9,5 +9,10 @@ export class BreedResolver {
   @Query(returns => [Breed], { name: 'breeds' })
   getAllBreeds() {
     return this.breedService.getAllBreeds();
+  }
+
+  @Query(returns => Breed, { name: 'breed' })
+  getBreed(@Args('breedId') breedId: string) {
+    return this.breedService.getBreed(breedId);
   }
 }

@@ -1,5 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Dog } from 'src/dog/dog.model';
+import { Dog } from './../dog/dog.model';
 
 @ObjectType()
 export class User {

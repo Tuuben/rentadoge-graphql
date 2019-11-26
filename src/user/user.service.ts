@@ -54,6 +54,10 @@ export class UserService {
   async getBookedDog(userId: string) {
     const booking = await this.getActiveBooking(userId);
 
+    if (!booking) {
+      return undefined;
+    }
+
     const { dogId } = booking;
 
     const bookedDog = await this.getDog(dogId);
@@ -79,6 +83,6 @@ export class UserService {
       .doc(dogId)
       .get();
 
-    return combineDocument(snapshot)[0] as Booking;
+    return combineDocument(snapshot) as Booking;
   }
 }

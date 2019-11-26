@@ -3,8 +3,8 @@ import { Breed } from './../breed/breed.model';
 
 @ObjectType()
 export class Dog {
-  @Field()
-  id: string;
+  @Field({ nullable: true })
+  id?: string;
 
   @Field({ nullable: true })
   name?: string;
@@ -21,7 +21,7 @@ export class Dog {
   @Field({ nullable: true })
   updatedAt?: Date;
 
-  @Field(type => Breed)
+  @Field(type => Breed, { nullable: true })
   breed?: Breed;
 
   @Field({ nullable: true })
@@ -31,7 +31,7 @@ export class Dog {
   isBooked?: boolean;
 
   @Field({ nullable: true })
-  bookingStatus: 'open' | 'booked' | 'user-booked' | 'pending-return';
+  bookingStatus?: 'open' | 'booked' | 'user-booked' | 'pending-return';
 
   /* Non queriable fields */
   breedId?: string;

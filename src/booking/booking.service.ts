@@ -52,6 +52,8 @@ export class BookingService {
       .collection('bookings')
       .where('dogId', '==', dogId)
       .where('userId', '==', userId)
+      .where('active', '==', true)
+      .limit(1)
       .get();
 
     const booking = combineCollectionSnapshot(snapshot)[0] as Booking;
@@ -66,11 +68,13 @@ export class BookingService {
       active: false,
     };
 
-    return !!admin
+    const res = await admin
       .firestore()
       .collection('bookings')
       .doc(booking.id)
       .update(updatedData);
+
+    return !!res;
   }
 
   acceptBookingEnded(bookingId: string) {
@@ -93,6 +97,7 @@ export class BookingService {
       .collection('bookings')
       .where('userId', '==', userId)
       .where('active', '==', true)
+      .limit(1)
       .get();
 
     const booking = combineCollectionSnapshot(snapshot)[0];
@@ -126,13 +131,13 @@ export class BookingService {
       .collection('bookings')
       .where('dogId', '==', dogId)
       .where('userId', '==', userId)
+      .where('active', '==', true)
+      .limit(1)
       .get();
 
-    const bookings = combineCollectionSnapshot(snapshot) as Booking[];
+    const booking = combineCollectionSnapshot(snapshot)[0];
 
-    const activeBooking = !!bookings.find(b => !!b.active);
-
-    return !!activeBooking;
+    return !!booking;
   }
 
   private async getIsDogBooked(dogId: string) {
