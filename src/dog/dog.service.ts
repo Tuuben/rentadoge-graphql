@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { combineCollectionSnapshot, combineDocument } from '../helper';
 import { Booking } from './../booking/booking.model';
+import { NotAuthorized } from './../common/exceptions/not-authorized.exception';
 import { Dog } from './dog.model';
 
 @Injectable()
@@ -53,5 +54,37 @@ export class DogService {
       .get();
 
     return combineCollectionSnapshot(snapshot);
+  }
+
+  async getTopRatedDogs() {
+    const snapshot = await admin
+      .firestore()
+      .collection('dogs')
+      .orderBy('rating', 'desc')
+      .limit(10)
+      .get();
+
+    return combineCollectionSnapshot(snapshot);
+  }
+
+  async incrementRating(dogId: string, userId: string) {
+    if (!userId) {
+      throw new NotAuthorized();
+    }
+
+    const increment = admin.firestore.FieldValue.increment(1);
+    await admin
+      .firestore()
+      .collection('dogs')
+      .doc(dogId)
+      .update({ rating: increment });
+
+    const snapshot = await admin
+      .firestore()
+      .collection('dogs')
+      .doc(dogId)
+      .get();
+
+    return combineDocument(snapshot);
   }
 }

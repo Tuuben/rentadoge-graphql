@@ -1,11 +1,13 @@
 import {
   Args,
   Context,
+  Mutation,
   Parent,
   Query,
   ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
+import {} from 'type-graphql';
 import { BookingService } from './../booking/booking.service';
 import { Breed } from './../breed/breed.model';
 import { BreedService } from './../breed/breed.service';
@@ -33,6 +35,19 @@ export class DogResolver {
   @Query(returns => [Dog], { name: 'dogs' })
   async getDogs() {
     return this.dogService.getAllDogs();
+  }
+
+  @Query(returns => [Dog], { name: 'topRatedDogs' })
+  async getTopRatedDogs() {
+    return this.dogService.getTopRatedDogs();
+  }
+
+  @Mutation(returns => Dog)
+  async incrementRating(
+    @Args('dogId') dogId: string,
+    @Context('context') { userId },
+  ) {
+    return this.dogService.incrementRating(dogId, userId);
   }
 
   @ResolveProperty(resolve => Breed)

@@ -16,6 +16,9 @@ export class Dog {
   imgURL?: string;
 
   @Field({ nullable: true })
+  rating?: number;
+
+  @Field({ nullable: true })
   createdAt?: Date;
 
   @Field({ nullable: true })

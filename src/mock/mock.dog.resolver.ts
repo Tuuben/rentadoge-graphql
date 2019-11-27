@@ -13,7 +13,7 @@ export class MockDogResolver {
     for (let i = 0; i < 30; i++) {
       const profile = randomProfile.profile();
       const breed = breeds[i % breeds.length];
-
+      const rating = Math.round(Math.random() * 100);
       const dog = {
         name: profile.firstName,
         description:
@@ -22,6 +22,7 @@ export class MockDogResolver {
         createdAt: new Date(),
         breedId: breed.id,
         imgURL: breed.imgURL,
+        rating,
       } as Dog;
 
       dogs.push(dog);

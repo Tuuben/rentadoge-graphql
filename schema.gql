@@ -32,6 +32,7 @@ type Dog {
   name: String
   description: String
   imgURL: String
+  rating: Float
   createdAt: DateTime
   updatedAt: DateTime
   breed: Breed
@@ -44,6 +45,7 @@ type Mutation {
   createBooking(dogId: String!): Booking!
   endBooking(dogId: String!): Boolean!
   acceptBookingEnded(bookingId: String!): Boolean!
+  incrementRating(dogId: String!): Dog!
   createMockDogsAndBreeds: String!
   updateUser(data: UserDataInput!): Boolean!
 }
@@ -54,6 +56,7 @@ type Query {
   usersBookedDog: Dog
   dog(dogId: String!): Dog!
   dogs: [Dog!]!
+  topRatedDogs: [Dog!]!
   user: User!
 }
 
