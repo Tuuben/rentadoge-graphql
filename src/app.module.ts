@@ -13,7 +13,7 @@ import { UserModule } from './user/user.module';
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
-      debug: true,
+      debug: !process.env.IS_PRODUCTION,
       playground: true,
       context: async ({ req }) => {
         const userId = await decodeAuthTokenToId(req);
