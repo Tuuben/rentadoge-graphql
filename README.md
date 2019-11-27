@@ -20,7 +20,7 @@ This project is based on [Nest](https://github.com/nestjs/nest) framework TypeSc
   .env
 ```
 
-### 3. Add your firebase credentials
+### 3. Add your Firebase credentials
 
 ```
   FIREBASE_PROJECT_ID = "< YOUR PROJECT ID >"
