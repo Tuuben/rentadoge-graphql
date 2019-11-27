@@ -11,6 +11,10 @@ export async function decodeAuthTokenToId(req: any) {
 
   const token = req.headers.authorization.split('Bearer ')[1];
 
+  if (!token) {
+    return undefined;
+  }
+
   const decoded = await admin.auth().verifyIdToken(token, true);
 
   return decoded && decoded.uid;

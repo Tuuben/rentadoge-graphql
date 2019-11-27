@@ -56,8 +56,8 @@ export class DogResolver {
     return this.breedService.getBreed(breedId);
   }
 
-  @ResolveProperty()
-  bookingStatus(@Parent() dog: Dog, @Context('context') { userId }) {
-    return this.bookingService.getBookingStatus(dog.id, userId);
+  @ResolveProperty(resolve => String)
+  bookingState(@Parent() dog: Dog, @Context('context') { userId }) {
+    return this.bookingService.getBookingState(dog.id, userId);
   }
 }

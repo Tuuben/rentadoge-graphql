@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { NotAuthorized } from './../common/exceptions/not-authorized.exception';
-import { combineCollectionSnapshot } from './../helper';
+import { combineCollectionSnapshot, combineDocument } from './../helper';
 import { Booking } from './booking.model';
 
 @Injectable()
@@ -11,19 +11,14 @@ export class BookingService {
       throw new NotAuthorized();
     }
 
-    const [userHasActiveBooking, dogIsBooked] = await Promise.all([
-      this.userHasActiveBooking(userId),
-      this.getIsDogBooked(dogId),
+    const [hasActiveBooking, dogIsBooked] = await Promise.all([
+      this.getUserActiveBooking(userId),
+      this.getDogBooking(dogId),
     ]);
 
-    if (userHasActiveBooking || dogIsBooked) {
+    if (hasActiveBooking || dogIsBooked) {
       throw new HttpException('Already booked.', HttpStatus.BAD_REQUEST);
     }
-
-    const id = admin
-      .firestore()
-      .collection('bookings')
-      .doc().id;
 
     const booking = {
       dogId,
@@ -33,13 +28,18 @@ export class BookingService {
       updatedAt: new Date(),
     };
 
-    admin
+    await admin
       .firestore()
       .collection('bookings')
-      .doc(id)
-      .create(booking);
+      .add(booking);
 
-    return { id, ...booking };
+    const dogSnapshot = await admin
+      .firestore()
+      .collection('dogs')
+      .doc(dogId)
+      .get();
+
+    return combineDocument(dogSnapshot);
   }
 
   async endBooking(dogId: string, userId: string) {
@@ -68,13 +68,19 @@ export class BookingService {
       active: false,
     };
 
-    const res = await admin
+    await admin
       .firestore()
       .collection('bookings')
       .doc(booking.id)
       .update(updatedData);
 
-    return !!res;
+    const dogSnapshot = await admin
+      .firestore()
+      .collection('dogs')
+      .doc(dogId)
+      .get();
+
+    return combineDocument(dogSnapshot);
   }
 
   acceptBookingEnded(bookingId: string) {
@@ -91,7 +97,33 @@ export class BookingService {
       .update(data);
   }
 
-  async userHasActiveBooking(userId: string) {
+  async getBookingState(dogId: string, userId: string) {
+    if (!userId) {
+      return 'sign-in';
+    }
+
+    const [userHasBooking, dogIsBooked, dogIsBookedByUser] = await Promise.all([
+      this.getUserActiveBooking(userId),
+      this.getDogBooking(dogId),
+      this.getIsDogBookedByUser(dogId, userId),
+    ]);
+
+    if (dogIsBookedByUser) {
+      return 'return';
+    }
+
+    if (dogIsBooked) {
+      return 'unavailable';
+    }
+
+    if (userHasBooking) {
+      return 'other-booking';
+    }
+
+    return 'available';
+  }
+
+  async getUserActiveBooking(userId: string) {
     const snapshot = await admin
       .firestore()
       .collection('bookings')
@@ -101,24 +133,7 @@ export class BookingService {
       .get();
 
     const booking = combineCollectionSnapshot(snapshot)[0];
-    return !!booking;
-  }
-
-  async getBookingStatus(dogId: string, userId: string) {
-    if (userId) {
-      const dogBookedByUser = await this.getIsDogBookedByUser(dogId, userId);
-
-      if (dogBookedByUser) {
-        return 'user-booked';
-      }
-    }
-
-    const isCurrentlyBooked = await this.getIsDogBooked(dogId);
-    if (isCurrentlyBooked) {
-      return 'booked';
-    }
-
-    return 'open';
+    return booking;
   }
 
   private async getIsDogBookedByUser(dogId: string, userId: string) {
@@ -140,7 +155,7 @@ export class BookingService {
     return !!booking;
   }
 
-  private async getIsDogBooked(dogId: string) {
+  private async getDogBooking(dogId: string) {
     const snapshot = await admin
       .firestore()
       .collection('bookings')

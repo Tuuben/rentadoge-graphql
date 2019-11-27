@@ -38,12 +38,12 @@ type Dog {
   breed: Breed
   isBookedByUser: Boolean
   isBooked: Boolean
-  bookingStatus: String
+  bookingState: String
 }
 
 type Mutation {
-  createBooking(dogId: String!): Booking!
-  endBooking(dogId: String!): Boolean!
+  createBooking(dogId: String!): Dog!
+  endBooking(dogId: String!): Dog!
   acceptBookingEnded(bookingId: String!): Boolean!
   incrementRating(dogId: String!): Dog!
   createMockDogsAndBreeds: String!
